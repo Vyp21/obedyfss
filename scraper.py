@@ -1,7 +1,7 @@
 import re
 import json
-from curl_cffi import requests
-from bs4 import BeautifulSoup
+import time
+import requests
 
 RESTAURANTS = [
     {"name": "La Famiglia", "url": "https://lafamigliabrno.cz/denni-menu"},
@@ -21,16 +21,19 @@ DAYS_MAP = {
 PRICE_REGEX = re.compile(r'(\d{2,4}(?:[.,]\d{1,2})?\s*(?:Kč|,-))', re.IGNORECASE)
 
 def parse_restaurant(res):
+    # Použití Jina Reader proxy k obejití blokace IP adres GitHubu (chyby 403 / 455)
+    proxy_url = f"https://r.jina.ai/{res['url']}"
+    headers = {
+        "Accept": "text/plain",
+        "X-Return-Format": "text"
+    }
+
     try:
-        # Vydává se za skutečný prohlížeč Chrome (obejde chyby 403 a 455)
-        response = requests.get(res["url"], impersonate="chrome", timeout=20)
+        response = requests.get(proxy_url, headers=headers, timeout=30)
         response.raise_for_status()
-        soup = BeautifulSoup(response.text, 'html.parser')
+        text = response.text
 
-        for tag in soup(["script", "style", "nav", "footer", "header"]):
-            tag.extract()
-
-        lines = [line.strip() for line in soup.get_text(separator='\n').split('\n') if line.strip()]
+        lines = [line.strip() for line in text.split('\n') if line.strip()]
 
         items = []
         current_day = "Týdenní nabídka"
@@ -39,22 +42,25 @@ def parse_restaurant(res):
         for i, line in enumerate(lines):
             lower_line = line.lower()
 
+            # Detekce dne v týdnu
             day_found = False
             for key, day_name in DAYS_MAP.items():
-                if key in lower_line and len(line) < 40:
+                if key in lower_line and len(line) < 45:
                     current_day = day_name
                     day_found = True
                     break
             if day_found:
                 continue
 
+            # Detekce ceny
             price_match = PRICE_REGEX.search(line)
             if price_match:
                 price = price_match.group(1)
-                meal_name = PRICE_REGEX.sub('', line).strip(" -–:•\t")
+                meal_name = PRICE_REGEX.sub('', line).strip(" -–:•|*#\t")
 
+                # Pokud je cena na samostatném řádku pod názvem jídla
                 if len(meal_name) < 4 and i > 0:
-                    prev_line = lines[i - 1]
+                    prev_line = lines[i - 1].strip(" -–:•|*#\t")
                     if not PRICE_REGEX.search(prev_line) and prev_line.lower() not in DAYS_MAP:
                         meal_name = prev_line
 
@@ -98,6 +104,7 @@ def main():
     for res in RESTAURANTS:
         print(f"Stahuji: {res['name']}...")
         results.append(parse_restaurant(res))
+        time.sleep(2)  # Krátká pauza mezi požadavky
 
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
