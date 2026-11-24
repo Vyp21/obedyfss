@@ -20,13 +20,15 @@ DAYS_MAP = {
 }
 
 PRICE_REGEX = re.compile(r'(\d{2,4}(?:[.,]\d{1,2})?\s*(?:Kč|,-))', re.IGNORECASE)
+# Hledá odkazy na obrázky ve formátu Markdown ![alt](url) nebo přímé URL obrázků
+IMG_REGEX = re.compile(r'(?:!\[.*?\]\((https?://[^\s\)]+\.(?:jpg|jpeg|png|webp)[^\s\)]*)\)|(https?://[^\s"\'<>]+\.(?:jpg|jpeg|png|webp)[^\s"\'<>]*))', re.IGNORECASE)
 
 def fetch_via_proxies(target_url):
-    # 1. Pokus: Jina Reader (vykreslí stránku jako prohlížeč)
+    # 1. Pokus: Jina Reader (vrací text včetně odkazů na obrázky v Markdownu)
     try:
         r = requests.get(
             f"https://r.jina.ai/{target_url}",
-            headers={"Accept": "text/plain", "X-Return-Format": "text"},
+            headers={"Accept": "text/plain"},
             timeout=25
         )
         if r.status_code == 200 and len(r.text) > 100:
@@ -34,25 +36,36 @@ def fetch_via_proxies(target_url):
     except Exception:
         pass
 
-    # 2. Pokus: AllOrigins proxy (jiná IP adresa)
+    # 2. Pokus: AllOrigins proxy
     try:
         encoded = urllib.parse.quote(target_url, safe='')
         r = requests.get(f"https://api.allorigins.win/raw?url={encoded}", timeout=25)
         if r.status_code == 200 and len(r.text) > 100:
-            # Odstranění HTML značek
-            clean = re.sub(r'<[^>]+>', '\n', r.text)
-            return clean
+            return r.text
     except Exception:
         pass
 
-    raise Exception("Všechny metody stažení selhaly (web blokuje přístup ze serverů).")
+    raise Exception("Všechny metody stažení selhaly.")
+
+def extract_images(text):
+    images = []
+    ignore_words = ['logo', 'icon', 'flag', 'vlajka', 'avatar', 'facebook', 'instagram', 'tripadvisor']
+    for match in IMG_REGEX.findall(text):
+        img_url = match[0] or match[1]
+        if img_url and not any(w in img_url.lower() for w in ignore_words):
+            if img_url not in images:
+                images.append(img_url)
+    return images[:3]  # Maximálně 3 hlavní obrázky ze stránky
 
 def parse_restaurant(res):
     try:
         text = fetch_via_proxies(res["url"])
-        lines = [line.strip() for line in text.split('\n') if line.strip()]
+        # Odstranění HTML značek pro čistší čtení řádků, ale zachování Markdown odkazů
+        clean_text = re.sub(r'<[^>]+>', '\n', text)
+        lines = [line.strip() for line in clean_text.split('\n') if line.strip()]
 
         items = []
+        images = []
         current_day = "Týdenní nabídka"
         seen_meals = set()
 
@@ -87,18 +100,22 @@ def parse_restaurant(res):
                         "price": price
                     })
 
+        # Pokud se nenašla žádná textová jídla, zkusíme najít obrázek s menu
         if not items:
-            items.append({
-                "day": "Týdenní nabídka",
-                "category": "",
-                "name": "Web se načetl, ale nenašly se ceny v Kč (menu může být v obrázku/PDF).",
-                "price": ""
-            })
+            images = extract_images(text)
+            if not images:
+                items.append({
+                    "day": "Týdenní nabídka",
+                    "category": "",
+                    "name": "Menu se nepodařilo automaticky načíst. Zkontrolujte web restaurace.",
+                    "price": ""
+                })
 
         return {
             "restaurant": res["name"],
             "url": res["url"],
-            "items": items
+            "items": items,
+            "images": images
         }
 
     except Exception as e:
@@ -110,7 +127,8 @@ def parse_restaurant(res):
                 "category": "",
                 "name": f"Chyba: {e}",
                 "price": ""
-            }]
+            }],
+            "images": []
         }
 
 def main():
