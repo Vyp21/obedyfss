@@ -25,7 +25,7 @@
             margin: 0 auto 20px auto;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-end;
             flex-wrap: wrap;
             gap: 15px;
         }
@@ -40,6 +40,12 @@
             color: var(--text);
             margin-top: 4px;
             text-transform: capitalize;
+        }
+        .update-info {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-top: 4px;
+            line-height: 1.4;
         }
         .day-filters {
             display: flex;
@@ -163,6 +169,10 @@
     <div class="title-block">
         <h1>🍽️ Polední nabídka</h1>
         <div class="current-date" id="today-label"></div>
+        <div class="update-info">
+            <span id="last-updated">Poslední aktualizace: načítám...</span> &bull;
+            <span>Pravidelná aktualizace: každé pondělí dopoledne</span>
+        </div>
     </div>
     <div class="day-filters" id="filters"></div>
 </header>
@@ -226,7 +236,6 @@
 
             let contentHtml = '';
 
-            // Pokud restaurace používá obrázky místo textového menu
             if (rest.images && rest.images.length > 0 && filteredItems.length === 0) {
                 contentHtml += `<div class="group-title">Obrázkové menu</div><div class="menu-images">`;
                 rest.images.forEach(imgUrl => {
@@ -273,13 +282,24 @@
 
     async function loadMenus() {
         const app = document.getElementById('app');
+        const updatedEl = document.getElementById('last-updated');
         try {
             const response = await fetch('data.json?t=' + new Date().getTime());
             if (!response.ok) throw new Error('Soubor data.json zatím neexistuje.');
-            menuData = await response.json();
+            const rawData = await response.json();
+
+            if (Array.isArray(rawData)) {
+                menuData = rawData;
+                updatedEl.textContent = 'Poslední aktualizace: nezjištěno';
+            } else {
+                menuData = rawData.restaurants || [];
+                updatedEl.textContent = 'Poslední aktualizace: ' + (rawData.updated_at || 'nezjištěno');
+            }
+
             renderMenus();
         } catch (err) {
             app.innerHTML = `<p>Čekám na první stažení dat. Spusťte akci v záložce <strong>Actions</strong> na GitHubu.</p>`;
+            updatedEl.textContent = 'Poslední aktualizace: čeká se na stažení';
         }
     }
 
