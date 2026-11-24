@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polední menu</title>
+    <style>
+        :root {
+            --bg: #f4f5f7;
+            --card-bg: #ffffff;
+            --primary: #d9381e;
+            --text: #222222;
+            --muted: #666666;
+            --border: #e2e5e9;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            max-width: 1200px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .title-block h1 {
+            margin: 0;
+            font-size: 1.6rem;
+            color: var(--primary);
+        }
+        .current-date {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-top: 4px;
+            text-transform: capitalize;
+        }
+        .day-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .day-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .day-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+        .day-btn.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #ffffff;
+        }
+        .grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+            gap: 20px;
+        }
+        @media (max-width: 550px) {
+            .grid { grid-template-columns: 1fr; }
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .card-header {
+            background: #fafafa;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        .card-header a {
+            font-size: 0.85rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .card-header a:hover { text-decoration: underline; }
+        .menu-list {
+            padding: 15px 20px;
+        }
+        .group-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--primary);
+            font-weight: 700;
+            margin: 14px 0 6px 0;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 3px;
+        }
+        .group-title:first-child { margin-top: 0; }
+        .menu-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 6px 0;
+            border-bottom: 1px dashed #eeeeee;
+            gap: 15px;
+        }
+        .menu-item:last-child { border-bottom: none; }
+        .meal-name { font-size: 0.95rem; line-height: 1.4; }
+        .meal-category-tag {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-right: 6px;
+            font-weight: 600;
+        }
+        .meal-price {
+            font-weight: 700;
+            white-space: nowrap;
+            color: #111;
+        }
+        .empty-msg {
+            color: var(--muted);
+            font-size: 0.9rem;
+            font-style: italic;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="title-block">
+        <h1>🍽️ Polední nabídka</h1>
+        <div class="current-date" id="today-label"></div>
+    </div>
+    <div class="day-filters" id="filters"></div>
+</header>
+
+<main class="grid" id="app"></main>
+
+<script>
+    const DAYS = ["Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek"];
+    let menuData = [];
+    let selectedDay = "Vše";
+
+    function initDateAndFilters() {
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('cs-CZ', { 
+            weekday: 'long', 
+            day: 'numeric', 
+            month: 'numeric', 
+            year: 'numeric' 
+        });
+        document.getElementById('today-label').textContent = dateStr;
+
+        const dayIndex = now.getDay();
+        if (dayIndex >= 1 && dayIndex <= 5) {
+            selectedDay = DAYS[dayIndex - 1];
+        } else {
+            selectedDay = "Vše";
+        }
+
+        renderFilterButtons();
+    }
+
+    function renderFilterButtons() {
+        const filtersEl = document.getElementById('filters');
+        const options = ["Vše", ...DAYS];
+        
+        filtersEl.innerHTML = options.map(day => `
+            <button class="day-btn ${selectedDay === day ? 'active' : ''}" onclick="setDay('${day}')">
+                ${day}
+            </button>
+        `).join('');
+    }
+
+    function setDay(day) {
+        selectedDay = day;
+        renderFilterButtons();
+        renderMenus();
+    }
+
+    function renderMenus() {
+        const app = document.getElementById('app');
+        app.innerHTML = '';
+
+        menuData.forEach(rest => {
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            const filteredItems = rest.items.filter(item => {
+                if (selectedDay === "Vše") return true;
+                return item.day === selectedDay || item.day === "Týdenní nabídka";
+            });
+
+            let itemsHtml = '';
+            let currentGroup = '';
+
+            filteredItems.forEach(item => {
+                const groupLabel = selectedDay === "Vše" 
+                    ? item.day 
+                    : (item.day === "Týdenní nabídka" ? "Týdenní nabídka" : item.category);
+
+                if (groupLabel && groupLabel !== currentGroup) {
+                    currentGroup = groupLabel;
+                    itemsHtml += `<div class="group-title">${currentGroup}</div>`;
+                }
+
+                const catPrefix = (selectedDay === "Vše" && item.category) 
+                    ? `<span class="meal-category-tag">[${item.category}]</span>` 
+                    : '';
+
+                itemsHtml += `
+                    <div class="menu-item">
+                        <span class="meal-name">${catPrefix}${item.name}</span>
+                        <span class="meal-price">${item.price}</span>
+                    </div>
+                `;
+            });
+
+            card.innerHTML = `
+                <div class="card-header">
+                    <h2>${rest.restaurant}</h2>
+                    <a href="${rest.url}" target="_blank" rel="noopener">Web restaurace ↗</a>
+                </div>
+                <div class="menu-list">
+                    ${itemsHtml || `<p class="empty-msg">Pro den <strong>${selectedDay}</strong> nemá restaurace vypsané menu.</p>`}
+                </div>
+            `;
+            app.appendChild(card);
+        });
+    }
+
+    async function loadMenus() {
+        const app = document.getElementById('app');
+        try {
+            const response = await fetch('data.json?t=' + new Date().getTime());
+            if (!response.ok) throw new Error('Soubor data.json zatím neexistuje.');
+            menuData = await response.json();
+            renderMenus();
+        } catch (err) {
+            app.innerHTML = `<p>Čekám na první stažení dat. Spusťte akci v záložce <strong>Actions</strong> na GitHubu.</p>`;
+        }
+    }
+
+    initDateAndFilters();
+    loadMenus();
+</script>
+
+</body>
+</html>

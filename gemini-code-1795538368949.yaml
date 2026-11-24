@@ -1,0 +1,37 @@
+name: Aktualizace obědového menu
+
+on:
+  schedule:
+    # Spustí se každé pondělí v 8:30 UTC (9:30/10:30 českého času)
+    - cron: '30 8 * * 1'
+  # Umožní ruční spuštění jedním kliknutím v záložce Actions
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-menu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stažení repozitáře
+        uses: actions/checkout@v4
+
+      - name: Nastavení Pythonu
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalace knihoven
+        run: pip install -r requirements.txt
+
+      - name: Spuštění scraperu
+        run: python scraper.py
+
+      - name: Uložení nových dat na GitHub
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data.json
+          git commit -m "Aktualizace menu" || exit 0
+          git push
