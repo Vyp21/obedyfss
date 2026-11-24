@@ -4,10 +4,172 @@
     "url": "https://lafamigliabrno.cz/denni-menu",
     "items": [
       {
-        "day": "Týdenní nabídka",
+        "day": "Pondělí",
         "category": "",
-        "name": "Chyba při načítání webu: 455 Client Error: Client Error for url: https://lafamigliabrno.cz/denni-menu",
-        "price": ""
+        "name": "rajčata, mozzarella, salám Ventricina, červená cibulka, rucola",
+        "price": "189 Kč"
+      },
+      {
+        "day": "Pondělí",
+        "category": "",
+        "name": "smetana, mozzarella, kuřecí prsa, listový špenát, niva, vejce, polníček",
+        "price": "199 Kč"
+      },
+      {
+        "day": "Pondělí",
+        "category": "",
+        "name": "smetana, mozzarella Fior di Latte, Gorgonzola, sýr Taleggio, sýr Stracchino, hoblinky Parmigiano Reggiano",
+        "price": "269 Kč"
+      },
+      {
+        "day": "Pondělí",
+        "category": "",
+        "name": "fiilírované kuřecí prsíčko, bazalkové pesto ( čerstvá bazalka, parmezán, olivový olej, piniové ořechy ), Parmigiano Reggiano",
+        "price": "179 Kč"
+      },
+      {
+        "day": "Pondělí",
+        "category": "",
+        "name": "krůtí prsíčka, čerstvý ananas, mungo klíčky, wok zelenina, ústřicová omáčka, bambusové výhonky, jasmínová rýže s koriandrem",
+        "price": "189 Kč"
+      },
+      {
+        "day": "Pondělí",
+        "category": "",
+        "name": "vepřová panenka na jehle balená v pancettě, švestková omáčka s redukovaným portským vínem, pečené grenaille brambůrky se slupkou a rozmarýnem, smažené cibulové kroužky",
+        "price": "189 Kč"
+      },
+      {
+        "day": "Pondělí",
+        "category": "",
+        "name": "New York cheesecake s mangovým coulis, Čokoládový Sacher dort se šlehačkou",
+        "price": "59 Kč"
+      },
+      {
+        "day": "Úterý",
+        "category": "",
+        "name": "smetana, mozzarella, pancetta, vejce, rucola",
+        "price": "189 Kč"
+      },
+      {
+        "day": "Úterý",
+        "category": "",
+        "name": "rajčata, mozzarella, šunka cotto, žampiony, salám Napoli, grilovaná paprika, beraní rohy, červená cibule",
+        "price": "199 Kč"
+      },
+      {
+        "day": "Úterý",
+        "category": "",
+        "name": "restované kousky vepřové panenky, česnek, hříbky, listový špenát, smetana, Parmigiano Reggiano",
+        "price": "179 Kč"
+      },
+      {
+        "day": "Úterý",
+        "category": "",
+        "name": "200g Mexické burrito s trhaným vepřovým masem,fazolovou pastou, chedarem, limetkovou rýží s koriandrem, plátky rajčete, červená šalotka, julienne bramborové hranolky, BBQ dip",
+        "price": "199 Kč"
+      },
+      {
+        "day": "Úterý",
+        "category": "",
+        "name": "prosciutto, pečené brambory se slupkou a rozmarýnem, omáčka z vyzrálého cheddaru, smažené cibulové kroužky",
+        "price": "189 Kč"
+      },
+      {
+        "day": "Středa",
+        "category": "",
+        "name": "rajčata, mozzarella, klobása, vejce, cibule",
+        "price": "189 Kč"
+      },
+      {
+        "day": "Středa",
+        "category": "",
+        "name": "smetana, mozzarella, salám Milano, pancetta, jarní cibulka, kukuřice",
+        "price": "199 Kč"
+      },
+      {
+        "day": "Středa",
+        "category": "",
+        "name": "rigatoni, kuřecí prsa, sušená rajčata, olivový olej, parmezán, piniové oříšky, Parmigiano Reggiano",
+        "price": "179 Kč"
+      },
+      {
+        "day": "Středa",
+        "category": "",
+        "name": "kuřecí stehenní steaky na citronu a másle, kuskus se sušenými rajčátky a petrželkou",
+        "price": "189 Kč"
+      },
+      {
+        "day": "Středa",
+        "category": "",
+        "name": "omáčka z pečeného česneku, restované žampiony s pancettou, americké kořeněné brambory",
+        "price": "189 Kč"
+      },
+      {
+        "day": "Čtvrtek",
+        "category": "",
+        "name": "rajčata, mozzarella, plátky rajčat, čerstvá bazalka",
+        "price": "189 Kč"
+      },
+      {
+        "day": "Čtvrtek",
+        "category": "",
+        "name": "smetana, mozzarella, pancetta, žampiony",
+        "price": "199 Kč"
+      },
+      {
+        "day": "Čtvrtek",
+        "category": "",
+        "name": "smetana, mozzarella Fior di Latte, Gorgonzola, sýr Taleggio, sýr Stracchino, hoblinky Parmigiano Reggiano.",
+        "price": "269 Kč"
+      },
+      {
+        "day": "Čtvrtek",
+        "category": "",
+        "name": "kuřecí prsa, šunka cotto, gorgonzola, smetanový bešamel, Parmigiano Reggiano",
+        "price": "179 Kč"
+      },
+      {
+        "day": "Čtvrtek",
+        "category": "",
+        "name": "kachní prsíčko, sladko-slaná japonská omáčka, pak choi, brokolice, paprika, mrkev, cuketa, jarní cibulka, žampiony, sezam, jasmínová rýže",
+        "price": "199 Kč"
+      },
+      {
+        "day": "Čtvrtek",
+        "category": "",
+        "name": "anglická slanina, cibule, pečené grenaille brambůrky se slupkou, demi glace, ajvar",
+        "price": "189 Kč"
+      },
+      {
+        "day": "Pátek",
+        "category": "",
+        "name": "rajčata, mozzarella, šunka cotto, rucola",
+        "price": "189 Kč"
+      },
+      {
+        "day": "Pátek",
+        "category": "",
+        "name": "smetana, mozzarella, sýr s modrou plísní, camembert, kuřecí prsa, černé olivy",
+        "price": "199 Kč"
+      },
+      {
+        "day": "Pátek",
+        "category": "",
+        "name": "spaghetti, rajčata, pancetta guanciale, čerstvá chilli paprička, Pecorino Romano",
+        "price": "179 Kč"
+      },
+      {
+        "day": "Pátek",
+        "category": "",
+        "name": "v sezamové strouhance, bramborovo-hráškové pyré, rajčatový salátek",
+        "price": "189 Kč"
+      },
+      {
+        "day": "Pátek",
+        "category": "",
+        "name": "krůtí prsa, restované zelené fazolky s pancettou, steakové bramborové hranolky",
+        "price": "189 Kč"
       }
     ]
   },
@@ -18,7 +180,7 @@
       {
         "day": "Týdenní nabídka",
         "category": "",
-        "name": "Chyba při načítání webu: 403 Client Error: Forbidden for url: https://desidhaba.cz/cs/",
+        "name": "Web se načetl, ale nenašly se ceny v Kč (menu může být v obrázku/PDF).",
         "price": ""
       }
     ]
@@ -28,10 +190,112 @@
     "url": "https://nasevasebistro.cz/denni-menu-2/",
     "items": [
       {
-        "day": "Týdenní nabídka",
+        "day": "Pondělí",
         "category": "",
-        "name": "Chyba při načítání webu: 455 Client Error: Client Error for url: https://nasevasebistro.cz/denni-menu-2/",
-        "price": ""
+        "name": "Polévka: 0,3l Valašská kyselica s klobáskou",
+        "price": "35 Kč"
+      },
+      {
+        "day": "Pondělí",
+        "category": "",
+        "name": "Menu 1: 150g Smažený čerstvý květák s petrželovým bramborem, domácí bylinkový dip, salát polníček",
+        "price": "160 Kč"
+      },
+      {
+        "day": "Pondělí",
+        "category": "",
+        "name": "Menu 2: 300g KUŘECÍ KARI se zeleninou, kari pastou a kokosovým mlékem, dušená rýže se smaženou křupavou cibulkou",
+        "price": "170 Kč"
+      },
+      {
+        "day": "Pondělí",
+        "category": "",
+        "name": "Menu 3: 300g SLOVENSKÉ BRYNZOVÉ HALUŠKY S UZENÝM OŠTĚPKEM, DOMÁCÍ CIBULOVOU SLÁMOU A PETRŽELKOU",
+        "price": "170 Kč"
+      },
+      {
+        "day": "Úterý",
+        "category": "",
+        "name": "Polévka: 0,3l Hráškový krém s krutony",
+        "price": "35 Kč"
+      },
+      {
+        "day": "Úterý",
+        "category": "",
+        "name": "Menu 1: 300g BRAMBOROVÉ ŠULÁNKY S MÁKEM, CUKREM, SKOŘICÍ A PŘEPUŠTĚNÝM MÁSLEM",
+        "price": "160 Kč"
+      },
+      {
+        "day": "Úterý",
+        "category": "",
+        "name": "Menu 2: 150g Holandský řízek z jemně mleté libové pečeně s goudou, smetanová bramborová kaše, salát polníček",
+        "price": "170 Kč"
+      },
+      {
+        "day": "Středa",
+        "category": "",
+        "name": "Polévka: 0,3l Květákový krém s ricottou a krutony",
+        "price": "35 Kč"
+      },
+      {
+        "day": "Středa",
+        "category": "",
+        "name": "Menu 1: 300g MAC and CHEESE – zapečené makarony ve smetanovo – čedarové omáčce se sušenými rajčaty a bylinkami",
+        "price": "160 Kč"
+      },
+      {
+        "day": "Středa",
+        "category": "",
+        "name": "Menu 2: 300g PERKELT – maďarské kuřecí prso na paprice s žampiony, bramborové halušky s máslem, muškátovým oříškem a petrželkou",
+        "price": "170 Kč"
+      },
+      {
+        "day": "Středa",
+        "category": "",
+        "name": "Menu 3: 250g Pečené kuřecí stehýnko na bylinkovém másle s bramborovo – batátovou kaší, salát polníček",
+        "price": "170 Kč"
+      },
+      {
+        "day": "Čtvrtek",
+        "category": "",
+        "name": "Polévka: 0,3l Krém z červené čočky s krutony",
+        "price": "35 Kč"
+      },
+      {
+        "day": "Čtvrtek",
+        "category": "",
+        "name": "Menu 1: 300g Zapečené bramborové noky QUATTRO FORMAGGI ve smetanovo – sýrové omáčce, zdobené parmazánem",
+        "price": "160 Kč"
+      },
+      {
+        "day": "Čtvrtek",
+        "category": "",
+        "name": "Menu 2: 250g Plněné bramborové knedlíky s libovým uzeným masem, dušené červené zelí s domácí cibulovou slámou",
+        "price": "170 Kč"
+      },
+      {
+        "day": "Čtvrtek",
+        "category": "",
+        "name": "Menu 3: 150g SMAŽENÝ SÝR GOUDA v kukuřičné krustě s petrželovým bramborem, domácí bylinkový dip, salát polníček",
+        "price": "170 Kč"
+      },
+      {
+        "day": "Pátek",
+        "category": "",
+        "name": "Polévka: 0,3l Kulajda s hříbky a vejcem",
+        "price": "35 Kč"
+      },
+      {
+        "day": "Pátek",
+        "category": "",
+        "name": "Menu 1: 300g Käsespätzle – zapečené špecle ve smetanové omáčce s rakouským aromatickým sýrem, smaženou křupavou cibulkou a petrželkou",
+        "price": "160 Kč"
+      },
+      {
+        "day": "Pátek",
+        "category": "",
+        "name": "Menu 2: 300g Krémové rizoto z pečených rajčat a paprik na bylinkovém másle, zdobené filírovaným kuřecím prsem, rukolou a parmazánem",
+        "price": "170 Kč"
       }
     ]
   },
