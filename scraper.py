@@ -135,9 +135,8 @@ def main():
         results.append(parse_restaurant(res))
         time.sleep(2)
 
-    # Aktuální český čas uložení
     prague_now = datetime.now(ZoneInfo("Europe/Prague"))
-    updated_str = prague_now.strftime("%-d. %-m. %Y v %H:%M")
+    updated_str = f"{prague_now.day}. {prague_now.month}. {prague_now.year} v {prague_now.strftime('%H:%M')}"
 
     output = {
         "updated_at": updated_str,
@@ -148,5 +147,4 @@ def main():
         json.dump(output, f, ensure_ascii=False, indent=2)
 
 if __name__ == "__main__":
-    main()_ == "__main__":
     main()
