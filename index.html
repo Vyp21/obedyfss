@@ -137,6 +137,18 @@
             white-space: nowrap;
             color: #111;
         }
+        .menu-images {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .menu-images img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            cursor: zoom-in;
+        }
         .empty-msg {
             color: var(--muted);
             font-size: 0.9rem;
@@ -207,35 +219,44 @@
             const card = document.createElement('div');
             card.className = 'card';
 
-            const filteredItems = rest.items.filter(item => {
+            const filteredItems = (rest.items || []).filter(item => {
                 if (selectedDay === "Vše") return true;
                 return item.day === selectedDay || item.day === "Týdenní nabídka";
             });
 
-            let itemsHtml = '';
-            let currentGroup = '';
+            let contentHtml = '';
 
-            filteredItems.forEach(item => {
-                const groupLabel = selectedDay === "Vše" 
-                    ? item.day 
-                    : (item.day === "Týdenní nabídka" ? "Týdenní nabídka" : item.category);
+            // Pokud restaurace používá obrázky místo textového menu
+            if (rest.images && rest.images.length > 0 && filteredItems.length === 0) {
+                contentHtml += `<div class="group-title">Obrázkové menu</div><div class="menu-images">`;
+                rest.images.forEach(imgUrl => {
+                    contentHtml += `<a href="${imgUrl}" target="_blank" rel="noopener" title="Kliknutím zvětšíte"><img src="${imgUrl}" alt="Menu ${rest.restaurant}" loading="lazy"></a>`;
+                });
+                contentHtml += `</div>`;
+            } else {
+                let currentGroup = '';
+                filteredItems.forEach(item => {
+                    const groupLabel = selectedDay === "Vše" 
+                        ? item.day 
+                        : (item.day === "Týdenní nabídka" ? "Týdenní nabídka" : item.category);
 
-                if (groupLabel && groupLabel !== currentGroup) {
-                    currentGroup = groupLabel;
-                    itemsHtml += `<div class="group-title">${currentGroup}</div>`;
-                }
+                    if (groupLabel && groupLabel !== currentGroup) {
+                        currentGroup = groupLabel;
+                        contentHtml += `<div class="group-title">${currentGroup}</div>`;
+                    }
 
-                const catPrefix = (selectedDay === "Vše" && item.category) 
-                    ? `<span class="meal-category-tag">[${item.category}]</span>` 
-                    : '';
+                    const catPrefix = (selectedDay === "Vše" && item.category) 
+                        ? `<span class="meal-category-tag">[${item.category}]</span>` 
+                        : '';
 
-                itemsHtml += `
-                    <div class="menu-item">
-                        <span class="meal-name">${catPrefix}${item.name}</span>
-                        <span class="meal-price">${item.price}</span>
-                    </div>
-                `;
-            });
+                    contentHtml += `
+                        <div class="menu-item">
+                            <span class="meal-name">${catPrefix}${item.name}</span>
+                            <span class="meal-price">${item.price}</span>
+                        </div>
+                    `;
+                });
+            }
 
             card.innerHTML = `
                 <div class="card-header">
@@ -243,7 +264,7 @@
                     <a href="${rest.url}" target="_blank" rel="noopener">Web restaurace ↗</a>
                 </div>
                 <div class="menu-list">
-                    ${itemsHtml || `<p class="empty-msg">Pro den <strong>${selectedDay}</strong> nemá restaurace vypsané menu.</p>`}
+                    ${contentHtml || `<p class="empty-msg">Pro den <strong>${selectedDay}</strong> nemá restaurace vypsané menu.</p>`}
                 </div>
             `;
             app.appendChild(card);
