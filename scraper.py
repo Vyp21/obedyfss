@@ -2,6 +2,8 @@ import re
 import json
 import time
 import urllib.parse
+from datetime import datetime
+from zoneinfo import ZoneInfo
 import requests
 
 RESTAURANTS = [
@@ -20,11 +22,9 @@ DAYS_MAP = {
 }
 
 PRICE_REGEX = re.compile(r'(\d{2,4}(?:[.,]\d{1,2})?\s*(?:Kč|,-))', re.IGNORECASE)
-# Hledá odkazy na obrázky ve formátu Markdown ![alt](url) nebo přímé URL obrázků
 IMG_REGEX = re.compile(r'(?:!\[.*?\]\((https?://[^\s\)]+\.(?:jpg|jpeg|png|webp)[^\s\)]*)\)|(https?://[^\s"\'<>]+\.(?:jpg|jpeg|png|webp)[^\s"\'<>]*))', re.IGNORECASE)
 
 def fetch_via_proxies(target_url):
-    # 1. Pokus: Jina Reader (vrací text včetně odkazů na obrázky v Markdownu)
     try:
         r = requests.get(
             f"https://r.jina.ai/{target_url}",
@@ -36,7 +36,6 @@ def fetch_via_proxies(target_url):
     except Exception:
         pass
 
-    # 2. Pokus: AllOrigins proxy
     try:
         encoded = urllib.parse.quote(target_url, safe='')
         r = requests.get(f"https://api.allorigins.win/raw?url={encoded}", timeout=25)
@@ -55,12 +54,11 @@ def extract_images(text):
         if img_url and not any(w in img_url.lower() for w in ignore_words):
             if img_url not in images:
                 images.append(img_url)
-    return images[:3]  # Maximálně 3 hlavní obrázky ze stránky
+    return images[:3]
 
 def parse_restaurant(res):
     try:
         text = fetch_via_proxies(res["url"])
-        # Odstranění HTML značek pro čistší čtení řádků, ale zachování Markdown odkazů
         clean_text = re.sub(r'<[^>]+>', '\n', text)
         lines = [line.strip() for line in clean_text.split('\n') if line.strip()]
 
@@ -100,7 +98,6 @@ def parse_restaurant(res):
                         "price": price
                     })
 
-        # Pokud se nenašla žádná textová jídla, zkusíme najít obrázek s menu
         if not items:
             images = extract_images(text)
             if not images:
@@ -138,8 +135,18 @@ def main():
         results.append(parse_restaurant(res))
         time.sleep(2)
 
+    # Aktuální český čas uložení
+    prague_now = datetime.now(ZoneInfo("Europe/Prague"))
+    updated_str = prague_now.strftime("%-d. %-m. %Y v %H:%M")
+
+    output = {
+        "updated_at": updated_str,
+        "restaurants": results
+    }
+
     with open("data.json", "w", encoding="utf-8") as f:
-        json.dump(results, f, ensure_ascii=False, indent=2)
+        json.dump(output, f, ensure_ascii=False, indent=2)
 
 if __name__ == "__main__":
+    main()_ == "__main__":
     main()
